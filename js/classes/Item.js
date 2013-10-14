@@ -22,9 +22,8 @@ app.Views.ItemView = Backbone.View.extend({
     },
 
     events: {
-        /*'click':'onClick'*/
-        /*'swipe':'swipe'*/
-        /*'mouseover':'mouseOver'*/
+        'click':'onClick'/*,
+        'touchstart': 'onTouch'*/
     },
 
     mouseOver:function() {
@@ -43,7 +42,11 @@ app.Views.ItemView = Backbone.View.extend({
 
       this.trigger('click');
 
-    }
+    }/*,
+
+    onTouch: function() {
+        this.trigger('touchstart');
+    }*/
 
 });
 

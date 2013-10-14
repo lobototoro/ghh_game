@@ -1,7 +1,8 @@
 /* Author: Thibaut MAREILLE */
 
-// Vars
 
+
+// Vars
 var chrono,
     countdown,
     // config
@@ -40,25 +41,26 @@ var chrono,
     tabGrid = [],
     tabItem = [],
     isTouch,
-    touchMoved, touchDown, touchBeginPosition, touchEndPosition, isLinkTouch;
-
-
+    touchMoved, touchDown, touchBeginPosition, touchEndPosition, isLinkTouch,
+    soundz;
 
 function init(){
 
   isTouch = 'ontouchstart' in window;
 
-  console.log("isTouch : "+isTouch);
+  console.log("isTouch : ", isTouch);
 
   // Empeche la surbrillance des elements
   document.onselectstart = new Function ("return false");
-  if(window.sidebar)
-  {
-    document.onmousedown = ffalse;
-    document.onclick = ftrue;
-  }
+
 
   buildGrid();
+
+  soundz = new Howl({
+    urls: ['sounds/2040.mp3'],
+    autoplay: false,
+    buffer: true
+  });
 
   $("#startGame").click(start);
 
@@ -83,11 +85,11 @@ function buildGrid(){
     tabGrid.push(bounds);
 
     // Debug
-    $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
+    // $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
 
   }
 
-  console.log(tabGrid);
+  console.log("tabgrid", tabGrid);
 
 }
 
@@ -107,7 +109,7 @@ function start() {
 
 function completeCountdown(){
 
-  $("#wrapper").bind('touchstart', onTouchStart);
+    $("#wrapper").bind('touchstart', onTouchStart);
 
   countdown = null;
   $("#countdown").remove();
@@ -127,7 +129,7 @@ function completeCountdown(){
     var h = itemModel.get("height");
 
     // Tire un square Aleatoire
-    var nbRandom = random(0,tabGrid.length-1,1);
+    var nbRandom = random(2,tabGrid.length-1,1);
     var rect = tabGrid[nbRandom];
     tabGrid.splice(nbRandom,1);
 
@@ -171,7 +173,7 @@ function animateItem(){
 }
 
 function clickItem(e){
-
+  soundz.play();
   this.remove();
   count++;
   if (count == NB_ITEM) {
@@ -208,7 +210,7 @@ function onTouchMove(e) {
   var x = touch.pageX - elm.left;
   var y = touch.pageY - elm.top;
 
-  console.log(x,y);
+  console.log("ontouchmove", x,y);
 
 }
 
@@ -229,10 +231,10 @@ function onTouchEnd(e) {
 
   touchDown = false;
 
-  console.log("position de départ");
-  console.log(touchBeginPosition);
-  console.log("position de fin");
-  console.log(touchEndPosition);
+  console.log("position de départ", touchBeginPosition);
+
+  console.log("position de fin", touchEndPosition);
+
 
 }
 
@@ -267,7 +269,7 @@ function floor(nNumber, nRoundToInterval) {
   return Math.floor(nNumber / nRoundToInterval) * nRoundToInterval;
 }
 
+
+
 $(document).ready(init);
-
-
 

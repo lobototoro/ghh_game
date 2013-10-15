@@ -15,9 +15,9 @@ app.Views.ItemView = Backbone.View.extend({
 
     render:function (eventName) {
 
-    this.setElement(this.template(this.model.toJSON()));
-    //Hammer(this.el).on("swipe", this.swipe);
-    return this;
+        this.setElement(this.template(this.model.toJSON()));
+        //Hammer(this.el).on("swipe", this.swipe);
+        return this;
 
     },
 

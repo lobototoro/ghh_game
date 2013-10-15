@@ -85,7 +85,7 @@ function buildGrid(){
     tabGrid.push(bounds);
 
     // Debug
-    // $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
+    $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
 
   }
 
@@ -210,8 +210,25 @@ function onTouchMove(e) {
   var x = touch.pageX - elm.left;
   var y = touch.pageY - elm.top;
 
-  console.log("ontouchmove", x,y);
+  console.log("ontouchmove", x, y, elm, touch.pageX);
 
+  $.each(tabItem, function(a, b) {
+    var stagedItem = $(b.el),
+        stagedItemX = parseInt(stagedItem.css('left')),
+        stagedItemY = parseInt(stagedItem.css('top'))
+        stagedItemW = stagedItemX + stagedItem.width(),
+        stagedItemH = stagedItemY + stagedItem.height();
+    if(stagedItemX < x && stagedItemW > x
+      && stagedItemY < y && stagedItemH > y) {
+      soundz.play();
+      stagedItem.remove();
+      count++;
+      if (count == NB_ITEM) {
+        timeResult = chrono.getResult();
+        finish();
+      }
+    }
+  });
 }
 
 function onTouchEnd(e) {
@@ -231,11 +248,24 @@ function onTouchEnd(e) {
 
   touchDown = false;
 
-  console.log("position de départ", touchBeginPosition);
+  // console.log("position de départ", touchBeginPosition);
 
-  console.log("position de fin", touchEndPosition);
+  // console.log("position de fin", touchEndPosition);
 
-
+  /*$.each(tabItem, function(a, b) {
+    var stagedItem = $(b.el),
+        stagedItemX = parseInt(stagedItem.css('left')),
+        stagedItemY = parseInt(stagedItem.css('top'));
+    if(stagedItemX > touchBeginPosition.x && stagedItemX <= touchEndPosition.x) {
+      soundz.play();
+      stagedItem.remove();
+      count++;
+      if (count == NB_ITEM) {
+        timeResult = chrono.getResult();
+        finish();
+      }
+    }
+  });*/
 }
 
 function finish(){

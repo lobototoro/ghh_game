@@ -4,13 +4,14 @@ var Countdown;
 
 Countdown = (function() {
 
-  function Countdown(selector,n) {
+  function Countdown(selector,n, sound) {
 
     console.log("new Countdown()");
 
     this.selector = selector;
     this.indice = n;
     this.timer;
+    this.sound = sound;
 
     this.updateUI(this.indice);
 
@@ -45,7 +46,7 @@ Countdown = (function() {
     $(this.selector).hide();
     $(this.selector).html(n);
     $(this.selector).fadeIn(200);
-
+    this.sound.play('kick');
     return true;
   };
 

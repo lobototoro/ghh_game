@@ -3,13 +3,13 @@
 
 
 // Vars
-var chrono,
-    countdown,
+var chrono, //nope
+    countdown,//nope
     // config
     NB_ITEM = 10,
-    tabItem = [],
-    count = 0,
-    timeResult,
+    tabItem = [],//nope
+    count = 0,//nope
+    timeResult,//nope
     // config ?
     tabImage = [
       {
@@ -85,7 +85,7 @@ function buildGrid(){
     tabGrid.push(bounds);
 
     // Debug
-    $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
+    // $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
 
   }
 
@@ -109,7 +109,7 @@ function start() {
 
 function completeCountdown(){
 
-    $("#wrapper").bind('touchstart', onTouchStart);
+  $("#wrapper").bind('touchstart', onTouchStart);
 
   countdown = null;
   $("#countdown").remove();

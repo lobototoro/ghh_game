@@ -46,7 +46,7 @@ Countdown = (function() {
     $(this.selector).hide();
     $(this.selector).html(n);
     $(this.selector).fadeIn(200);
-    this.sound.play('kick');
+    this.sound.play();
     return true;
   };
 

@@ -29,13 +29,13 @@ var chrono, //nope
       }
     ],
     // config
-    stageWidth = 990,
+    stageWidth = 390,
     // config
-    stageHeight = 500,
+    stageHeight = 196,
     // config
-    lineLength = 8,
+    lineLength = 4,
     // config
-    totalSquare = 32,
+    totalSquare = 16,
     squareWidth = Math.floor(stageWidth / lineLength),
     squareHeight = Math.floor(stageHeight / (totalSquare/lineLength)),
     tabGrid = [],
@@ -85,7 +85,7 @@ function buildGrid(){
     tabGrid.push(bounds);
 
     // Debug
-    // $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
+    $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
 
   }
 

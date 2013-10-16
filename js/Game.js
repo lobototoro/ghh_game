@@ -1,33 +1,89 @@
-// Class gamez
+/**
+ * [Game description] game of stains
+ * instantiation : new Game({
+ *     mobile: boolean to activate resize of the stage,
+ *     tablet: idem,
+ *     desk: idem,
+ *     config: { object containing basic vars to configure
+ *       "NB_ITEM": int,
+ *       "stageWidth": int, common sizes used in GHH are :
+ *       "stageHeight": int, 990x500, 590x297, 390x196
+ *       "lineLength": int,
+ *       "totalSquare": int
+ * });
+ */
 var Game = function(options) {
   _this = this;
-  this.NB_ITEM = 10;
+  this.mobile = false;
+  this.tablet = false;
+  this.desk = true; // by default we go desktop
+  this.container = $('#wrapper');
+  this.chronoSel = $('#chrono');
+  this.countdownSel = $('#countdown');
+  this.startGameSel = $('#startGame');
+  this.config = {
+    "NB_ITEM": 10,
+    "stageWidth": 990,
+    "stageHeight": 500,
+    "lineLength": 8,
+    "totalSquare": 32,
+    "tabImage": [
+      {
+        src:"img/50x50.jpg",
+        width:100,
+        height:100
+      },
+      {
+        src:"img/60x60.jpg",
+        width:60,
+        height:60
+      },
+      {
+        src:"img/70x70.jpg",
+        width:70,
+        height:70
+      }
+    ],
+    "soundFx": ["sounds/bleep.mp3"]
+  };
+  // object for config
+  /*this.confDesk = {
+    "NB_ITEM": 10,
+    "stageWidth": 990,
+    "stageHeight": 500,
+    "lineLength": 8,
+    "totalSquare": 32
+  };
+  this.confTablet = {
+    "NB_ITEM": 10,
+    "stageWidth": 990,
+    "stageHeight": 500,
+    "lineLength": 8,
+    "totalSquare": 32
+  };
+  this.confMobile = {
+    "NB_ITEM": 5,
+    "stageWidth": 390,
+    "stageHeight": 196,
+    "lineLength": 4,
+    "totalSquare": 16
+  };*/
+
+  if(options != null) {
+    $.extend(this, options);
+  }
+
+  this.NB_ITEM = this.config.NB_ITEM;
   this.tabItem = [];
   this.count = 0;
-  this.tabImage = [ // from config
-    {
-      src:"img/50x50.jpg",
-      width:50,
-      height:50
-    },
-    {
-      src:"img/60x60.jpg",
-      width:60,
-      height:60
-    },
-    {
-      src:"img/70x70.jpg",
-      width:70,
-      height:70
-    }
-  ];
-  this.stageWidth = 990;
+  this.tabImage = this.config.tabImage;
+  this.stageWidth = this.config.stageWidth;
   // config
-  this.stageHeight = 500;
+  this.stageHeight = this.config.stageHeight;
   // config
-  this.lineLength = 8;
+  this.lineLength = this.config.lineLength;
   // config
-  this.totalSquare = 32;
+  this.totalSquare = this.config.totalSquare;
   this.squareWidth = Math.floor(this.stageWidth / this.lineLength);
   this.squareHeight = Math.floor(this.stageHeight / (this.totalSquare/this.lineLength));
   this.tabGrid = [];
@@ -41,10 +97,16 @@ var Game = function(options) {
   this.touchBeginPosition;
   this.touchEndPosition;
   this.isLinkTouch;
-  this.soundz;
-
-  if(options != null)
-    $.extend(this, options);
+  this.soundz = new Howl({
+    urls: ['sounds/countdown.mp3'],
+    autoplay: false,
+    buffer: true
+  });
+  this.sweepSound = new Howl({
+    urls: this.config.soundFx, // configurable variable for sound
+    autoplay: false,
+    buffer: true
+  });
 
   this.init = function() {
     _this.isTouch = 'ontouchstart' in window;
@@ -54,24 +116,12 @@ var Game = function(options) {
     // Empeche la surbrillance des elements
     document.onselectstart = new Function ("return false");
 
-
     _this.buildGrid();
 
-    _this.soundz = new Howl({
-      urls: ['sounds/sprite.mp3'], // configurable variable for sound
-      sprite:{
-        kick: [0, 871],
-        blip: [871, 900]
-      },
-      autoplay: false,
-      buffer: true
-    });
-
-    $("#startGame").click(_this.start); // selector for button "start game"
+    _this.startGameSel.click(_this.start); // selector for button "start game"
   }
   this.buildGrid = function() {
     for (var i = 0;i<_this.totalSquare;i++) {
-
       var bounds = {};
       var ligne = Math.floor(i / _this.lineLength);
       var colonne = i % _this.lineLength;
@@ -87,28 +137,28 @@ var Game = function(options) {
       _this.tabGrid.push(bounds);
 
       // Debug
-      $("#wrapper").append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
+      _this.container.append("<div class=\"square\" style=\"left:"+posX+"px;top:"+posY+"px\"></div>");
 
     }
 
     //console.log("tabgrid", _this.tabGrid);
   }
   this.start = function() {
-    $("#startGame").remove();
+    _this.startGameSel.remove();
 
-    _this.chrono = new Chrono($("#chrono"));
+    _this.chrono = new Chrono(_this.chronoSel);
 
-    _this.countdown = new Countdown($("#countdown"),3, _this.soundz);
+    _this.countdown = new Countdown(_this.countdownSel,3, _this.soundz);
     _this.countdown.start();
     $(_this.countdown).on("onComplete", _this.completeCountdown);
 
     //completeCountdown();
   }
   this.completeCountdown = function() {
-    $("#wrapper").bind('touchstart', _this.onTouchStart);
+    _this.container.bind('touchstart', _this.onTouchStart);
 
     _this.countdown = null;
-    $("#countdown").remove();
+    _this.countdownSel.remove();
 
     // BuildItem
     for (var i=0;i<_this.NB_ITEM;i++) {
@@ -150,7 +200,7 @@ var Game = function(options) {
       var itemView = new app.Views.ItemView({model:itemModel});
 
       _this.tabItem.push(itemView);
-      $("#wrapper").append(itemView.render().el);
+      _this.container.append(itemView.render().el);
       itemView.on("click", _this.clickItem);
 
     }
@@ -166,7 +216,7 @@ var Game = function(options) {
 
   }
   this.clickItem = function(e) {
-    _this.soundz.play('blip');
+    _this.sweepSound.play();
     this.remove();
     _this.count++;
     if (_this.count == _this.NB_ITEM) {
@@ -185,8 +235,8 @@ var Game = function(options) {
     var _y = touch.pageY - elm.top;
     _this.touchBeginPosition = { x: _x , y: _y};
 
-    $("#wrapper").bind('touchmove', _this.onTouchMove); // wrapper selector to pass in options
-    $("#wrapper").bind('touchend', _this.onTouchEnd);
+    __this.container.bind('touchmove', _this.onTouchMove); // wrapper selector to pass in options
+    __this.container.bind('touchend', _this.onTouchEnd);
   }
   this.onTouchMove = function(e) {
     e.preventDefault();
@@ -221,8 +271,8 @@ var Game = function(options) {
     var _y = touch.pageY - elm.top;
     _this.touchEndPosition = { x: _x , y: _y};
 
-    $("#wrapper").unbind('touchmove', _this.onTouchMove);
-    $("#wrapper").unbind('touchend', _this.onTouchEnd);
+    __this.container.unbind('touchmove', _this.onTouchMove);
+    __this.container.unbind('touchend', _this.onTouchEnd);
 
     _this.touchDown = false;
   }
@@ -232,7 +282,7 @@ var Game = function(options) {
     // here, care to save the result  (cookie or localstorage)
   }
   this.swipeItem = function(element) {
-    _this.soundz.play('blip');
+    _this.sweepSound.play();
     element.remove();
     _this.count++;
     console.log(_this.count, _this.NB_ITEM);
@@ -262,15 +312,3 @@ var Game = function(options) {
   return this;
 };
 
-(function($){
-
-  var game = new Game({
-    /*NB_ITEM: 4,
-    stageWidth: 390,
-    stageHeight: 196,
-    lineLength:4,
-    totalSquare:8*/
-  });
-  // console.log(game);
-  game.init();
-})(jQuery, window);

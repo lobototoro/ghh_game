@@ -25,7 +25,7 @@
     <script type="text/template" id="itemTemplate">
       <div class="item" style="top:<%=posY%>px;left:<%=posX%>px;"><img src="<%=image%>"></div>
     </script>
-
+    <script type="text/javascript" src="js/libs/storage.js"></script>
     <script src="js/libs/jquery-1.7.2.min.js"></script>
     <script src="js/libs/underscore-min.js"></script>
     <script src="js/libs/backbone-min.js"></script>
@@ -35,9 +35,11 @@
     <script src="js/classes/Item.js"></script>
     <!-- <script src="js/main.js"></script> -->
     <script src="js/Game.js"></script>
+    <script type="text/javascript" src="js/libs/plugins.js"></script>
     <script type="text/javascript">
       (function($){
-
+        var results = JSON.stringify("last result");
+        localStorage.setItem("lastResults", results);
         var game = new Game({
           mobile: true,
           desk: false,
@@ -47,11 +49,11 @@
           countdownSel: $('#countdown'),
           startGameSel: $('#startGame'),
           config: {
-            "NB_ITEM": 5,
-            "stageWidth": 390,
-            "stageHeight": 196,
-            "lineLength": 4,
-            "totalSquare": 16,
+            "NB_ITEM": 10,
+            "stageWidth": 990,
+            "stageHeight": 500,
+            "lineLength": 8,
+            "totalSquare": 32,
             "tabImage": [
               {
                 src:"img/50x50.jpg",
@@ -69,7 +71,7 @@
                 height:70
               }
             ],
-            "soundFx": ["sounds/bleep.mp3"]
+            "soundFx": ["sounds/blop.mp3", "sounds/blop.ogg"]
           }
         });
         game.init();

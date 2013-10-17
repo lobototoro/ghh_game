@@ -1,0 +1,28 @@
+{
+  "minigameID": 00000000, // ID of the mini game
+  "miniGame": {
+    "NB_ITEM": 10, // nb of items displayed
+    // "stageWidth": 990,
+    // "stageHeight": 196,
+    // "lineLength": 4,
+    // "totalSquare": 16,
+    "tabImage": [
+      {
+        "src":"img/50x50.jpg", // url of the smallest stain
+        "width":50,
+        "height":50
+      },
+      {
+        "src":"img/60x60.jpg",// url of the medium stain
+        "width":60,
+        "height":60
+      },
+      {
+        "src":"img/70x70.jpg",// url of the largest stain
+        "width":70,
+        "height":70
+      }
+    ],
+    "soundFx": ["sounds/blop.mp3", "sounds/blop.ogg"] // url of the sound in 2 formats
+  }
+}

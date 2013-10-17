@@ -4,6 +4,10 @@
  *     mobile: boolean to activate resize of the stage,
  *     tablet: idem,
  *     desk: idem,
+ *     container: jquery selector that holds the stage,
+ *     chronoSel: jquery selector for the chrono display,
+ *     countdownSel: jquery selector for the countdown display,
+ *     startGameSel: jquery selector for the button "start game"
  *     config: { object containing basic vars to configure
  *       "NB_ITEM": int,
  *       "stageWidth": int, common sizes used in GHH are :
@@ -98,7 +102,7 @@ var Game = function(options) {
   this.touchEndPosition;
   this.isLinkTouch;
   this.soundz = new Howl({
-    urls: ['sounds/countdown.mp3'],
+    urls: ['sounds/countdown.mp3', 'sounds/countdown.ogg'],
     autoplay: false,
     buffer: true
   });
@@ -235,8 +239,8 @@ var Game = function(options) {
     var _y = touch.pageY - elm.top;
     _this.touchBeginPosition = { x: _x , y: _y};
 
-    __this.container.bind('touchmove', _this.onTouchMove); // wrapper selector to pass in options
-    __this.container.bind('touchend', _this.onTouchEnd);
+    _this.container.bind('touchmove', _this.onTouchMove); // wrapper selector to pass in options
+    _this.container.bind('touchend', _this.onTouchEnd);
   }
   this.onTouchMove = function(e) {
     e.preventDefault();
@@ -276,12 +280,7 @@ var Game = function(options) {
 
     _this.touchDown = false;
   }
-  this.finish = function(e) {
-    _this.chrono.stop();
-    setTimeout(function(){alert("Votre résultat : "+_this.timeResult);},100); // last popin of result
-    // here, care to save the result  (cookie or localstorage)
-  }
-  this.swipeItem = function(element) {
+  this.swipeItem = function(element) { // duplicate of clickItem
     _this.sweepSound.play();
     element.remove();
     _this.count++;
@@ -291,6 +290,22 @@ var Game = function(options) {
       _this.finish();
     }
   }
+  this.finish = function(e) {
+    _this.chrono.stop();
+    setTimeout(function(){alert("Votre résultat : "+_this.timeResult);},100); // last popin of result
+    // here, care to save the result  (cookie or localstorage)
+    if (localstorage.getItem("lastResults") !== null) {
+      var previous = localstorage.getItem("lastResults");
+      var thisTime = _this.timeResult;
+      var total =
+      console.log("parse the json", parse(previous));
+    } else {
+      var total = _this.timeResult;
+
+    }
+
+  }
+
   this.random = function(nMinimum, nMaximum, nRoundToInterval) {
 
     if (!nRoundToInterval || nRoundToInterval == null || nRoundToInterval == undefined) nRoundToInterval = 1;
